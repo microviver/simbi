@@ -30,7 +30,14 @@ import matplotlib.pyplot as plt
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_AI_BOT_TOKEN")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 ASSISTANT_ID = os.environ.get("OPENAI_ASSISTANT_ID")
-ADMIN_USER_ID = int(os.environ.get("ADMIN_TELEGRAM_ID", "0"))
+
+try:
+    ADMIN_USER_ID = int(os.environ.get("ADMIN_TELEGRAM_ID", "0").strip().replace('"', ''))
+    if ADMIN_USER_ID == 0:
+        raise ValueError
+except:
+    raise ValueError("ADMIN_TELEGRAM_ID está mal definida. Verifica que é um número válido.")
+
 
 if not TELEGRAM_TOKEN:
     raise ValueError("TELEGRAM_AI_BOT_TOKEN no encontrado!")
@@ -38,8 +45,6 @@ if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY no encontrado!")
 if not ASSISTANT_ID:
     raise ValueError("OPENAI_ASSISTANT_ID no encontrado!")
-if ADMIN_USER_ID == 0:
-    raise ValueError("ADMIN_TELEGRAM_ID no definido o inválido!")
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
