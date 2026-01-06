@@ -31,12 +31,15 @@ TELEGRAM_TOKEN = os.environ.get("TELEGRAM_AI_BOT_TOKEN")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 ASSISTANT_ID = os.environ.get("OPENAI_ASSISTANT_ID")
 
+raw_admin_id = os.environ.get("ADMIN_TELEGRAM_ID", "0")
+clean_admin_id = raw_admin_id.strip().replace('"', '').replace("'", '')
+
 try:
-    ADMIN_USER_ID = int(os.environ.get("ADMIN_TELEGRAM_ID", "0").strip().replace('"', ''))
+    ADMIN_USER_ID = int(clean_admin_id)
     if ADMIN_USER_ID == 0:
         raise ValueError
-except:
-    raise ValueError("ADMIN_TELEGRAM_ID está mal definida. Verifica que é um número válido.")
+except Exception:
+    raise ValueError(f"ADMIN_TELEGRAM_ID está mal definida. Valor recebido: {repr(raw_admin_id)}")
 
 
 if not TELEGRAM_TOKEN:
