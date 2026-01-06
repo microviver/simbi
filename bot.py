@@ -519,10 +519,13 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.edit_message_text("Enviando logs...")
         for filename in os.listdir("logs"):
             if filename.endswith(".log"):
-                await query.message.reply_document(
-                    document=InputFile(os.path.join("logs", filename)),
-                    caption=f"Archivo de log: {filename}",
-                )
+                filepath = os.path.join("logs", filename)
+                with open(filepath, "rb") as f:
+                    await query.message.reply_document(
+                        document=InputFile(f, filename=filename),
+                        caption=f"Archivo de log: {filename}",
+                    )
+
 
     elif data == "ask_user_id":
         await query.edit_message_text("Envía el comando:\n/userstats <telegram_id>")
